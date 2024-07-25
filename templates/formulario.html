@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Clasificador de Hongos</title>
+    <title>Clasificador de Periodontitis</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -74,29 +74,31 @@
         }
     </style>
     <script>
-        function clasificarSetas(event) {
+        function clasificarPeriodontitis(event) {
             event.preventDefault();
-            const cap_diameter = document.getElementById('cap_diameter').value;
-            const cap_shape = document.getElementById('cap_shape').value;
-            const gill_attachment = document.getElementById('gill_attachment').value;
-            const stem_height = document.getElementById('stem_height').value;
-            const stem_width = document.getElementById('stem_width').value;
-            const stem_color = document.getElementById('stem_color').value;
-            const season = document.getElementById('season').value;
+            const Edad = document.getElementById('Edad').value;
+            const Sexo = document.getElementById('Sexo').value;
+            const Índice_Placa = document.getElementById('Índice_Placa').value;
+            const Profundidad_Bolsas = document.getElementById('Profundidad_Bolsas').value;
+            const Sangrado_Sondeo = document.getElementById('Sangrado_Sondeo').value;
+            const Pérdida_Inserción = document.getElementById('Pérdida_Inserción').value;
+            const Diabetes = document.getElementById('Diabetes').value;
+            const Historial_Familiar = document.getElementById('Historial_Familiar').value;
+            const Higiene_Bucal = document.getElementById('Higiene_Bucal').value;
 
             fetch('/predict', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: `cap_diameter=${cap_diameter}&cap_shape=${cap_shape}&gill_attachment=${gill_attachment}&stem_height=${stem_height}&stem_width=${stem_width}&stem_color=${stem_color}&season=${season}`,
+                body: `Edad=${Edad}&Sexo=${Sexo}&Índice_Placa=${Índice_Placa}&Profundidad_Bolsas=${Profundidad_Bolsas}&Sangrado_Sondeo=${Sangrado_Sondeo}&Pérdida_Inserción=${Pérdida_Inserción}&Diabetes=${Diabetes}&Historial_Familiar=${Historial_Familiar}&Higiene_Bucal=${Higiene_Bucal}`,
             })
             .then(response => response.json())
             .then(data => {
                 if (data.error) {
                     document.getElementById('resultado').innerText = 'Error: ' + data.error;
                 } else {
-                    document.getElementById('resultado').innerText = 'El Hongo es ' + data.class;
+                    document.getElementById('resultado').innerText = 'Resultado de Periodontitis:: ' + data.Tiene_Periodontitis;
                 }
             })
             .catch(error => {
@@ -108,36 +110,41 @@
 </head>
 <body>
     <div class="container">
-        <h1>CARLOS EZEQUIEL MEYER MEDINA / 9B / 20210696 </h1>
-        <h1>Clasificador de Hongos:</h1>
-        <form id="formulario" onsubmit="clasificarSetas(event)">
+        <h1>Clasificador de Periodontitis</h1>
+        <form id="formulario" onsubmit="clasificarPeriodontitis(event)">
             <div class="column">
-                <label for="cap_diameter">Diámetro del Sombrero (0 - 1891):</label>
-                <input type="text" id="cap_diameter" name="cap_diameter">
+                <label for="Edad">Edad:</label>
+                <input type="text" id="Edad" name="Edad">
 
-                <label for="cap_shape">Forma del Sombrero (0 - 6):</label>
-                <input type="text" id="cap_shape" name="cap_shape">
+                <label for="Sexo">Sexo (M, F):</label>
+                <input type="text" id="Sexo" name="Sexo">
 
-                <label for="gill_attachment">Unión de las Láminas (0 - 6):</label>
-                <input type="text" id="gill_attachment" name="gill_attachment">
+                <label for="Índice_Placa">Índice de Placa:</label>
+                <input type="text" id="Índice_Placa" name="Índice_Placa">
 
-                <label for="stem_height">Altura del Tallo (0 - 3.84):</label>
-                <input type="text" id="stem_height" name="stem_height">
+                <label for="Profundidad_Bolsas">Profundidad de Bolsas:</label>
+                <input type="text" id="Profundidad_Bolsas" name="Profundidad_Bolsas">
+
+                <label for="Sangrado_Sondeo">Sangrado al Sondeo (Sí, No):</label>
+                <input type="text" id="Sangrado_Sondeo" name="Sangrado_Sondeo">
             </div>
             <div class="column">
-                <label for="stem_width">Ancho del Tallo (0 - 3569):</label>
-                <input type="text" id="stem_width" name="stem_width">
+                <label for="Pérdida_Inserción">Pérdida de Inserción:</label>
+                <input type="text" id="Pérdida_Inserción" name="Pérdida_Inserción">
 
-                <label for="stem_color">Color del Tallo (0 - 12):</label>
-                <input type="text" id="stem_color" name="stem_color">
+                <label for="Diabetes">Diabetes (Sí, No):</label>
+                <input type="text" id="Diabetes" name="Diabetes">
 
-                <label for="season">Temporada (0.03 - 1.8):</label>
-                <input type="text" id="season" name="season">
+                <label for="Historial_Familiar">Historial Familiar (Sí, No):</label>
+                <input type="text" id="Historial_Familiar" name="Historial_Familiar">
+
+                <label for="Higiene_Bucal">Higiene Bucal (1, 2, 3):</label>
+                <input type="text" id="Higiene_Bucal" name="Higiene_Bucal">
 
                 <input type="submit" value="Enviar">
             </div>
         </form>
-        <div id="resultado">Resultado</div>
+        <div id="resultado">Resultado de Periodontitis: </div>
     </div>
 </body>
 </html>
