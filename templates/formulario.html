@@ -85,20 +85,23 @@
             const Diabetes = document.getElementById('Diabetes').value;
             const Historial_Familiar = document.getElementById('Historial_Familiar').value;
             const Higiene_Bucal = document.getElementById('Higiene_Bucal').value;
+            const Consumo_Tabaco = document.getElementById('Consumo_Tabaco').value;
+            const Control_Placa = document.getElementById('Control_Placa').value;
 
             fetch('/predict', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: `Edad=${Edad}&Sexo=${Sexo}&Índice_Placa=${Índice_Placa}&Profundidad_Bolsas=${Profundidad_Bolsas}&Sangrado_Sondeo=${Sangrado_Sondeo}&Pérdida_Inserción=${Pérdida_Inserción}&Diabetes=${Diabetes}&Historial_Familiar=${Historial_Familiar}&Higiene_Bucal=${Higiene_Bucal}`,
+                body: `Edad=${encodeURIComponent(Edad)}&Sexo=${encodeURIComponent(Sexo)}&Índice_Placa=${encodeURIComponent(Índice_Placa)}&Profundidad_Bolsas=${encodeURIComponent(Profundidad_Bolsas)}&Sangrado_Sondeo=${encodeURIComponent(Sangrado_Sondeo)}&Pérdida_Inserción=${encodeURIComponent(Pérdida_Inserción)}&Diabetes=${encodeURIComponent(Diabetes)}&Historial_Familiar=${encodeURIComponent(Historial_Familiar)}&Higiene_Bucal=${encodeURIComponent(Higiene_Bucal)}&Consumo_Tabaco=${encodeURIComponent(Consumo_Tabaco)}&Control_Placa=${encodeURIComponent(Control_Placa)}`
+
             })
             .then(response => response.json())
             .then(data => {
                 if (data.error) {
                     document.getElementById('resultado').innerText = 'Error: ' + data.error;
                 } else {
-                    document.getElementById('resultado').innerText = 'Resultado de Periodontitis:: ' + data.Tiene_Periodontitis;
+                    document.getElementById('resultado').innerText = 'Resultado de Periodontitis: ' + data.Tiene_Periodontitis;
                 }
             })
             .catch(error => {
@@ -127,10 +130,19 @@
 
                 <label for="Sangrado_Sondeo">Sangrado al Sondeo (Sí, No):</label>
                 <input type="text" id="Sangrado_Sondeo" name="Sangrado_Sondeo">
-            </div>
-            <div class="column">
+
                 <label for="Pérdida_Inserción">Pérdida de Inserción:</label>
                 <input type="text" id="Pérdida_Inserción" name="Pérdida_Inserción">
+                
+            </div>
+            <div class="column">
+
+                
+                <label for="Consumo_Tabaco">Consumo de Tabaco (Sí, No):</label>
+                <input type="text" id="Consumo_Tabaco" name="Consumo_Tabaco">
+
+                <label for="Control_Placa">Control de Placa (Sí, No):</label>
+                <input type="text" id="Control_Placa" name="Control_Placa">
 
                 <label for="Diabetes">Diabetes (Sí, No):</label>
                 <input type="text" id="Diabetes" name="Diabetes">
@@ -144,7 +156,9 @@
                 <input type="submit" value="Enviar">
             </div>
         </form>
+
         <div id="resultado">Resultado de Periodontitis: </div>
     </div>
 </body>
 </html>
+
