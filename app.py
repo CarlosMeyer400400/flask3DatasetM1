@@ -10,7 +10,8 @@ app = Flask(__name__)
 # Configurar el registro
 logging.basicConfig(level=logging.DEBUG)
 
-csv_path = 'periodontitis_dataset.csv'
+# Ruta completa del archivo CSV
+csv_path = 'periodontitis_dataset_70-30.csv'
 
 # Intentar cargar datos desde el CSV
 try:
@@ -23,7 +24,7 @@ except FileNotFoundError as e:
 # Verifica que los datos fueron cargados correctamente
 if data is not None:
     # Convertir características categóricas en variables dummy
-    data = pd.get_dummies(data, columns=['Sexo', 'Sangrado_Sondeo', 'Diabetes', 'Historial_Familiar'], drop_first=True)
+    data = pd.get_dummies(data, columns=['Sexo', 'Sangrado_Sondeo', 'Diabetes', 'Historial_Familiar', 'Consumo_Tabaco', 'Control_Placa'], drop_first=True)
     
     # Separar las características y la etiqueta
     X = data.drop('Tiene_Periodontitis', axis=1)
@@ -65,11 +66,13 @@ def predict():
         Diabetes = request.form['Diabetes']
         Historial_Familiar = request.form['Historial_Familiar']
         Higiene_Bucal = int(request.form['Higiene_Bucal'])
+        Consumo_Tabaco = request.form['Consumo_Tabaco']
+        Control_Placa = request.form['Control_Placa']
         
         # Convertir a DataFrame y crear dummies
-        data_df = pd.DataFrame([[Edad, Sexo, Índice_Placa, Profundidad_Bolsas, Sangrado_Sondeo, Pérdida_Inserción, Diabetes, Historial_Familiar, Higiene_Bucal]],
-                               columns=['Edad', 'Sexo', 'Índice_Placa', 'Profundidad_Bolsas', 'Sangrado_Sondeo', 'Pérdida_Inserción', 'Diabetes', 'Historial_Familiar', 'Higiene_Bucal'])
-        data_df = pd.get_dummies(data_df, columns=['Sexo', 'Sangrado_Sondeo', 'Diabetes', 'Historial_Familiar'], drop_first=True)
+        data_df = pd.DataFrame([[Edad, Sexo, Índice_Placa, Profundidad_Bolsas, Sangrado_Sondeo, Pérdida_Inserción, Diabetes, Historial_Familiar, Higiene_Bucal, Consumo_Tabaco, Control_Placa]],
+                               columns=['Edad', 'Sexo', 'Índice_Placa', 'Profundidad_Bolsas', 'Sangrado_Sondeo', 'Pérdida_Inserción', 'Diabetes', 'Historial_Familiar', 'Higiene_Bucal', 'Consumo_Tabaco', 'Control_Placa'])
+        data_df = pd.get_dummies(data_df, columns=['Sexo', 'Sangrado_Sondeo', 'Diabetes', 'Historial_Familiar', 'Consumo_Tabaco', 'Control_Placa'], drop_first=True)
         
         # Asegurarse de que las columnas coincidan con las del modelo
         data_df = data_df.reindex(columns=X_train.columns, fill_value=0)
